@@ -17,8 +17,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class MenuServlet extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int restaurantId = Integer.parseInt(req.getParameter("restaurantId"));
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	        throws ServletException, IOException {
+
+	    // Get restaurant ID from request and load its menu
+	    int restaurantId = Integer.parseInt(req.getParameter("restaurantId"));
+		System.out.println("Restaurant ID = " + restaurantId);
 		MenuDAOImpl menuDAOImpl = new MenuDAOImpl();
 		List<Menu> allMenu = menuDAOImpl.getAllMenu(restaurantId);
 		req.setAttribute("allMenu", allMenu);
