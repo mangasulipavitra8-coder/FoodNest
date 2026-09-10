@@ -224,8 +224,8 @@ for(Menu menu : allMenu){
 
 		<div class="menu-card">
 
-			<img src="<%= menu.getPath() %>" alt="<%= menu.getItemName() %>">
-
+		<img src="<%= menu.getPath().replace("images/menu/", "images/") %>" 
+     alt="<%= menu.getItemName() %>">
 			<div class="menu-content">
 
 				<h3><%= menu.getItemName() %></h3>

@@ -1,7 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.tap.Model.OrderTable, com.tap.Model.OrderItem, com.tap.Model.Menu, com.tap.Model.User, com.tap.DAOImpl.OrderItemDAOImpl, com.tap.DAOImpl.MenuDAOImpl" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ page
+	import="java.util.List, com.tap.Model.OrderTable, com.tap.Model.OrderItem, com.tap.Model.Menu, com.tap.Model.User, com.tap.DAOImpl.OrderItemDAOImpl, com.tap.DAOImpl.MenuDAOImpl"%>
+
 <%
 User loggedInUser = (User) session.getAttribute("user");
+
 if (loggedInUser == null) {
 	response.sendRedirect("login.html");
 	return;
@@ -9,12 +14,17 @@ if (loggedInUser == null) {
 
 List<OrderTable> orderList = (List<OrderTable>) request.getAttribute("orderList");
 %>
+
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>My Orders - FoodNest</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 <style>
 * {
 	margin: 0;
@@ -29,7 +39,6 @@ body {
 	min-height: 100vh;
 }
 
-/* Header Navbar */
 .header {
 	background: #1e1e1e;
 	padding: 15px 30px;
@@ -83,7 +92,6 @@ body {
 	background: #ff824d;
 }
 
-/* Main Container */
 .history-container {
 	width: 90%;
 	max-width: 1000px;
@@ -155,7 +163,6 @@ body {
 	border: 1px solid #ffc107;
 }
 
-/* Order items list */
 .order-body {
 	padding: 20px 25px;
 }
@@ -201,7 +208,6 @@ body {
 	font-size: 15px;
 }
 
-/* Empty State */
 .no-orders {
 	text-align: center;
 	padding: 80px 20px;
@@ -242,101 +248,192 @@ body {
 	background: #ff7d4d;
 }
 </style>
+
 </head>
+
 <body>
 
 	<!-- Header Navbar -->
 	<div class="header">
+
 		<h1>
 			<i class="fas fa-utensils"></i> FoodNest
 		</h1>
+
 		<div class="nav-links">
-			<a href="home"><i class="fas fa-home"></i> Home</a>
-			<a href="cart.jsp"><i class="fas fa-shopping-cart"></i> Cart</a>
-			<span class="user-greeting" style="font-weight: 600; color: #ff6b35; margin-left: 10px;">
-				Hello, <%= loggedInUser.getUserName() %>
+
+			<a href="home">
+				<i class="fas fa-home"></i> Home
+			</a>
+
+			<a href="cart.jsp">
+				<i class="fas fa-shopping-cart"></i> Cart
+			</a>
+
+			<span class="user-greeting"
+				style="font-weight: 600; color: #ff6b35; margin-left: 10px;">
+				Hello, <%=loggedInUser.getUserName()%>
 			</span>
-			<a href="logout"><button class="btn-nav" style="background: #dc3545;">Logout</button></a>
+
+			<a href="logout">
+				<button class="btn-nav"
+					style="background: #dc3545;">
+					Logout
+				</button>
+			</a>
+
 		</div>
 	</div>
 
+
 	<div class="history-container">
-		<h2 class="page-title"><i class="fas fa-history"></i> My Order & Payment History</h2>
-		
+
+		<h2 class="page-title">
+			<i class="fas fa-history"></i>
+			My Order & Payment History
+		</h2>
+
 		<%
 		if (orderList == null || orderList.isEmpty()) {
 		%>
-			<div class="no-orders">
-				<i class="fas fa-receipt"></i>
-				<h2>No Order History Found</h2>
-				<p>It looks like you haven't placed any orders yet. Start exploring delicious food now!</p>
-				<a href="home" class="browse-btn">Order Food Now</a>
-			</div>
+
+		<div class="no-orders">
+
+			<i class="fas fa-receipt"></i>
+
+			<h2>No Order History Found</h2>
+
+			<p>
+				It looks like you haven't placed any orders yet.
+				Start exploring delicious food now!
+			</p>
+
+			<a href="home" class="browse-btn">
+				Order Food Now
+			</a>
+
+		</div>
+
 		<%
 		} else {
+
 			OrderItemDAOImpl orderItemDAOImpl = new OrderItemDAOImpl();
 			MenuDAOImpl menuDAOImpl = new MenuDAOImpl();
-			
+
 			for (OrderTable order : orderList) {
+
 				boolean isPaid = "Paid".equalsIgnoreCase(order.getStatus());
 		%>
-				<div class="order-card">
-					<!-- Card Header: Order summary metadata -->
-					<div class="order-header">
-						<div class="order-info-group">
-							<div class="info-item">
-								<h4>Order Placed</h4>
-								<p><%= order.getOrderDate() %></p>
-							</div>
-							<div class="info-item">
-								<h4>Total Amount</h4>
-								<p style="color: #ff6b35;">₹<%= order.getTotalAmount() %></p>
-							</div>
-							<div class="info-item">
-								<h4>Payment Method</h4>
-								<p><%= order.getPaymentMethod() %></p>
-							</div>
-							<div class="info-item">
-								<h4>Order ID</h4>
-								<p>#<%= order.getOrderId() %></p>
-							</div>
-						</div>
-						
-						<span class="order-status <%= isPaid ? "status-paid" : "status-pending" %>">
-							<i class="fas <%= isPaid ? "fa-check-circle" : "fa-clock" %>"></i>
-							<%= order.getStatus() %>
-						</span>
+
+		<div class="order-card">
+
+			<!-- Card Header -->
+			<div class="order-header">
+
+				<div class="order-info-group">
+
+					<div class="info-item">
+						<h4>Order Placed</h4>
+						<p><%=order.getOrderDate()%></p>
 					</div>
-					
-					<!-- Card Body: Ordered Food Items -->
-					<div class="order-body">
-						<%
-						List<OrderItem> items = orderItemDAOImpl.getOrderItemsByOrderId(order.getOrderId());
-						if (items != null) {
-							for (OrderItem item : items) {
-								Menu menu = menuDAOImpl.getMenu(item.getMenuId());
-						%>
-								<div class="food-item">
-									<div class="food-details">
-										<img src="<%= (menu != null && menu.getPath() != null && !menu.getPath().isEmpty()) ? menu.getPath() : "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80" %>" alt="Food Item">
-										<div>
-											<div class="food-name"><%= menu != null ? menu.getItemName() : "Unknown Item (ID: " + item.getMenuId() + ")" %></div>
-											<div class="food-quantity">Quantity: <%= item.getQuantity() %></div>
-										</div>
-									</div>
-									<div class="food-total">₹<%= item.getItemTotal() %></div>
-								</div>
-						<%
-							}
-						}
-						%>
+
+					<div class="info-item">
+						<h4>Total Amount</h4>
+						<p style="color: #ff6b35;">
+							₹<%=order.getTotalAmount()%>
+						</p>
 					</div>
+
+					<div class="info-item">
+						<h4>Payment Method</h4>
+						<p><%=order.getPaymentMethod()%></p>
+					</div>
+
+					<div class="info-item">
+						<h4>Order ID</h4>
+						<p>
+							#<%=order.getOrderId()%>
+						</p>
+					</div>
+
 				</div>
+
+				<span
+					class="order-status <%=isPaid ? "status-paid" : "status-pending"%>">
+
+					<i
+						class="fas <%=isPaid ? "fa-check-circle" : "fa-clock"%>">
+					</i>
+
+					<%=order.getStatus()%>
+
+				</span>
+
+			</div>
+
+
+			<!-- Card Body -->
+			<div class="order-body">
+
+				<%
+				List<OrderItem> items =
+						orderItemDAOImpl.getOrderItemsByOrderId(order.getOrderId());
+
+				if (items != null) {
+
+					for (OrderItem item : items) {
+
+						Menu menu =
+								menuDAOImpl.getMenu(item.getMenuId());
+				%>
+
+				<div class="food-item">
+
+					<div class="food-details">
+
+						<!-- Fixed test image -->
+						<img
+							src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80"
+							alt="Food Item">
+
+						<div>
+
+							<div class="food-name">
+								<%=menu != null
+										? menu.getItemName()
+										: "Unknown Item (ID: " + item.getMenuId() + ")"%>
+							</div>
+
+							<div class="food-quantity">
+								Quantity: <%=item.getQuantity()%>
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="food-total">
+						₹<%=item.getItemTotal()%>
+					</div>
+
+				</div>
+
+				<%
+					}
+				}
+				%>
+
+			</div>
+
+		</div>
+
 		<%
 			}
 		}
 		%>
+
 	</div>
 
 </body>
+
 </html>

@@ -34,11 +34,30 @@ public class LoginServlet extends HttpServlet {
 		}
 		
 		if (matchedUser != null) {
-			HttpSession session = req.getSession();
-			session.setAttribute("user", matchedUser);
-			resp.sendRedirect("home");
+
+		    HttpSession session = req.getSession();
+
+		    session.setAttribute("user", matchedUser);
+
+		    String redirectAfterLogin =
+		            (String) session.getAttribute("redirectAfterLogin");
+
+		    if (redirectAfterLogin != null) {
+
+		        session.removeAttribute("redirectAfterLogin");
+
+		        resp.sendRedirect(redirectAfterLogin);
+
+		    } else {
+
+		        resp.sendRedirect("home");
+
+		    }
+
 		} else {
-			resp.sendRedirect("login.html");
+
+		    resp.sendRedirect("login.html");
+
 		}
 	}
 }
